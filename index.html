@@ -1,956 +1,384 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gil Wanderson Lopes de Oliveira — Portfólio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --card: #16161f;
-      --accent: #00f5a0;
-      --accent2: #00b4d8;
-      --text: #e8e8f0;
-      --muted: #6b6b80;
-      --border: rgba(0, 245, 160, 0.15);
-    }
-
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      width: 12px;
-      height: 12px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.1s ease;
-      mix-blend-mode: difference;
-    }
-
-    .cursor-ring {
-      width: 36px;
-      height: 36px;
-      border: 1.5px solid var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9998;
-      transition: transform 0.25s ease, width 0.2s, height 0.2s;
-      opacity: 0.5;
-    }
-
-    /* Grid noise texture overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      background-size: 200px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.5rem 4rem;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: -0.02em;
-      color: var(--accent);
-    }
-
-    .nav-logo span {
-      color: var(--text);
-    }
-
-    nav ul {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    nav ul a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    nav ul a:hover {
-      color: var(--accent);
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 8rem 4rem 4rem;
-      position: relative;
-      gap: 4rem;
-    }
-
-    .hero-left {
-      animation: fadeUp 0.9s ease both;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(0, 245, 160, 0.08);
-      border: 1px solid var(--border);
-      padding: 0.4rem 0.9rem;
-      border-radius: 2rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 2rem;
-    }
-
-    .hero-tag::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 .name-accent {
-      display: block;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 420px;
-      margin-bottom: 2.5rem;
-    }
-
-    .hero-desc strong {
-      color: var(--text);
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 0.85rem 2rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      display: inline-block;
-      cursor: none;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      border: 1.5px solid var(--accent);
-    }
-
-    .btn-primary:hover {
-      background: transparent;
-      color: var(--accent);
-      box-shadow: 0 0 20px rgba(0, 245, 160, 0.2);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1.5px solid rgba(255,255,255,0.15);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Hero Photo */
-    .hero-right {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: fadeUp 0.9s 0.2s ease both;
-      position: relative;
-    }
-
-    .photo-frame {
-      position: relative;
-      width: 340px;
-      height: 400px;
-    }
-
-    .photo-frame::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2), transparent);
-      z-index: 0;
-    }
-
-    .photo-frame::after {
-      content: '';
-      position: absolute;
-      bottom: -20px;
-      right: -20px;
-      width: 100%;
-      height: 100%;
-      border: 1.5px solid rgba(0, 245, 160, 0.3);
-      border-radius: 12px;
-      z-index: -1;
-    }
-
-    .photo-inner {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--card);
-    }
-
-    .photo-inner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      filter: grayscale(20%) contrast(1.05);
-      transition: filter 0.4s;
-    }
-
-    .photo-inner img:hover {
-      filter: grayscale(0%) contrast(1);
-    }
-
-    /* floating badge */
-    .float-badge {
-      position: absolute;
-      bottom: -10px;
-      left: -30px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 0.75rem 1.1rem;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      z-index: 10;
-      backdrop-filter: blur(8px);
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .float-badge .badge-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--accent);
-      display: block;
-    }
-
-    .float-badge-2 {
-      position: absolute;
-      top: 20px;
-      right: -30px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 0.75rem 1.1rem;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      z-index: 10;
-      animation: float 4s 2s ease-in-out infinite;
-    }
-
-    .float-badge-2 .badge-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--accent2);
-      display: block;
-    }
-
-    /* SECTION COMMON */
-    section {
-      padding: 6rem 4rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    .section-label::before {
-      content: '';
-      width: 30px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: -0.02em;
-      margin-bottom: 3rem;
-      line-height: 1.1;
-    }
-
-    /* ABOUT */
-    #sobre {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    .about-text p {
-      color: var(--muted);
-      line-height: 1.9;
-      font-size: 0.88rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .about-text p strong {
-      color: var(--text);
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      border-radius: 8px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .stat-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-
-    /* SKILLS */
-    #habilidades {
-      background: var(--bg);
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .skill-chip {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 1.2rem 1.5rem;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .skill-chip::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 2px;
-      width: 0;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.3s ease;
-    }
-
-    .skill-chip:hover {
-      transform: translateY(-3px);
-      border-color: rgba(0, 245, 160, 0.4);
-    }
-
-    .skill-chip:hover::after {
-      width: 100%;
-    }
-
-    .skill-icon {
-      width: 32px;
-      height: 32px;
-      background: rgba(0, 245, 160, 0.1);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-
-    /* PROJECTS */
-    #projetos {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 2rem;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(0, 245, 160, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .project-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .project-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 3rem;
-      font-weight: 800;
-      color: rgba(0, 245, 160, 0.08);
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
-
-    .project-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 0.7rem;
-      color: var(--text);
-    }
-
-    .project-desc {
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      padding: 0.25rem 0.6rem;
-      background: rgba(0, 245, 160, 0.08);
-      border: 1px solid rgba(0, 245, 160, 0.2);
-      border-radius: 3px;
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.06em;
-    }
-
-    /* CONTACT */
-    #contato {
-      background: var(--bg);
-      text-align: center;
-    }
-
-    .contact-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .contact-inner .section-label {
-      justify-content: center;
-    }
-
-    .contact-inner .section-label::before {
-      display: none;
-    }
-
-    .contact-desc {
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.8rem 1.4rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.78rem;
-      color: var(--text);
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: none;
-    }
-
-    .contact-item:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* FOOTER */
-    footer {
-      padding: 2rem 4rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    footer span {
-      color: var(--accent);
-    }
-
-    /* SCROLLBAR */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 10px;
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* BG grid lines */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,245,160,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,245,160,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    /* Terminal line */
-    .terminal-line {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-    }
-
-    .terminal-line::before {
-      content: '> ';
-      color: var(--accent);
-    }
-
-    .blink {
-      animation: blink 1s step-end infinite;
-      color: var(--accent);
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* Divider */
-    .divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      margin: 0 auto 2rem;
-    }
-
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      nav ul { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
-      .hero-right { order: -1; }
-      .photo-frame { width: 260px; height: 300px; }
-      .float-badge { display: none; }
-      .float-badge-2 { display: none; }
-      section { padding: 4rem 1.5rem; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d8d2c2">
+  <meta name="description" content="Portfólio profissional de Gil Wanderson Lopes de Oliveira — administração, processos, dados e tecnologia.">
+  <title>Gil Wanderson — Administração, processos & tecnologia</title>
+  <script>
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  </script>
+  <link rel="preload" href="assets/images/gil-wanderson-portrait.avif" as="image" type="image/avif" fetchpriority="high">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader-word" aria-label="Gil">
+      <span class="preloader-letter">G</span><span class="preloader-letter">I</span><span class="preloader-letter">L</span>
+    </div>
+    <p class="preloader-status">PORTFÓLIO / 2026</p>
+  </div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">GW<span>.</span></div>
-    <ul>
-      <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#habilidades">Habilidades</a></li>
-      <li><a href="#projetos">Experiência</a></li>
-      <li><a href="#contato">Contato</a></li>
-    </ul>
-  </nav>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-left">
-      <div class="hero-tag">Disponível para oportunidades</div>
-      <div class="terminal-line">auxiliar_administrativo.exe <span class="blink">|</span></div>
-      <h1>
-        Gil Wanderson<br>
-        <span class="name-accent">Lopes de Oliveira</span>
-      </h1>
-      <p class="hero-desc">
-        Auxiliar Administrativo com experiência em <strong>rotinas administrativas</strong>, suporte a equipes, gestão de documentos, controle de agendas e análise de processos. Estudante de <strong>Ciências da Computação</strong>, unindo organização, tecnologia e melhoria contínua.
-      </p>
-      <div class="hero-cta">
-        <a href="#projetos" class="btn btn-primary">Ver Experiência</a>
-        <a href="#contato" class="btn btn-ghost">Entrar em Contato</a>
+  <aside class="sidebar" aria-label="Navegação principal">
+    <div class="sidebar-panel sidebar-intro">
+      <div class="sidebar-topline">
+        <a class="mini-logo" href="#inicio" aria-label="Ir para o início">GIL<sup>®</sup></a>
+        <span class="availability"><i></i> Fortaleza, CE</span>
+      </div>
+      <div class="sidebar-person">
+        <picture>
+          <source srcset="assets/images/gil-wanderson-portrait.avif" type="image/avif">
+          <img src="assets/images/gil-wanderson-portrait.webp" alt="Retrato de Gil Wanderson" width="64" height="80" decoding="async">
+        </picture>
+        <p>Organização administrativa, análise de dados e tecnologia aplicadas a processos mais eficientes.</p>
       </div>
     </div>
 
-    <div class="hero-right">
-      <div class="photo-frame">
-        <div class="photo-inner">
-          <img src="https://media.licdn.com/dms/image/v2/D4D03AQHXC35iLiFGuA/profile-displayphoto-crop_800_800/B4DZjmTPnaGQAQ-/0/1756210462756?e=1781136000&v=beta&t=KDP99_QSHjGN0ULilZjjHhUAzgL8r278xPopIAB9F_Q" alt="foto de perfil">
-        <div class="float-badge">
-          <span class="badge-num">22</span>
-          anos de idade
-        </div>
-        <div class="float-badge-2">
-          <span class="badge-num">CC</span>
-          Ciência da Computação
-        </div>
+    <div class="sidebar-panel sidebar-stats" aria-label="Resumo profissional">
+      <div><strong>03</strong><span>anos de<br>experiência</span></div>
+      <div><strong>09</strong><span>competências<br>mapeadas</span></div>
+    </div>
+
+    <nav class="sidebar-panel sidebar-nav">
+      <a href="#inicio" class="is-active" data-nav="inicio"><span>⌂</span> Início</a>
+      <a href="#sobre" data-nav="sobre"><span>●</span> Sobre mim</a>
+      <a href="#experiencia" data-nav="experiencia"><span>▰</span> Experiência</a>
+      <a href="#competencias" data-nav="competencias"><span>◆</span> Competências</a>
+      <a href="#formacao" data-nav="formacao"><span>✦</span> Formação</a>
+      <a href="#contato" data-nav="contato"><span>↗</span> Contato</a>
+    </nav>
+
+    <div class="sidebar-panel mini-marquee" aria-label="Principais áreas">
+      <div class="mini-marquee-track">
+        <span>EXCEL</span><span>PROCESSOS</span><span>DADOS</span><span>DOCUMENTOS</span>
+        <span aria-hidden="true">EXCEL</span><span aria-hidden="true">PROCESSOS</span><span aria-hidden="true">DADOS</span><span aria-hidden="true">DOCUMENTOS</span>
       </div>
     </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section id="sobre">
-    <div class="section-label">Sobre mim</div>
-    <div class="about-grid">
-      <div class="about-text">
-        <h2 class="section-title">Perfil<br>Profissional</h2>
-        <p>
-          Sou <strong>Gil Wanderson Lopes de Oliveira</strong>, profissional proativo com experiência consolidada em rotinas administrativas e suporte a equipes. Tenho familiaridade com softwares de gestão, pacote Office, organização documental e acompanhamento de processos.
-        </p>
-        <p>
-          Atuo na Coordenadoria de Monitoramento Assistencial dos Contratos de Gestão da <strong>Secretaria da Saúde do Estado do Ceará</strong>, oferecendo suporte aos processos administrativos, à mediação das relações com organizações sociais e ao monitoramento de indicadores de desempenho.
-        </p>
-        <p>
-          Meu foco é contribuir para processos mais eficientes, claros e bem organizados, unindo minha experiência administrativa à formação em <strong>Ciências da Computação</strong>.
-        </p>
+    <button class="sidebar-panel copy-email" type="button" data-copy="gilwanderson785@gmai.com" aria-label="Copiar e-mail">
+      <span class="copy-email-value">gilwanderson785@gmai.com</span>
+      <span class="copy-email-icon" aria-hidden="true">▣</span>
+      <span class="copy-feedback" role="status">Copiar e-mail</span>
+    </button>
+
+    <a class="sidebar-cta magnetic" href="#contato" data-swap-text>
+      <span class="swap-original">Vamos conversar</span>
+      <span class="swap-clone" aria-hidden="true">Vamos conversar</span>
+    </a>
+  </aside>
+
+  <header class="mobile-header">
+    <a class="mini-logo" href="#inicio">GIL<sup>®</sup></a>
+    <button class="mobile-menu-button" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span>
+    </button>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Navegação móvel">
+      <a href="#inicio">Início</a>
+      <a href="#sobre">Sobre mim</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#competencias">Competências</a>
+      <a href="#formacao">Formação</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <section id="inicio" class="hero" data-section="inicio">
+      <div class="hero-sticky">
+        <div class="hero-wordmark" aria-hidden="true">
+          <span>G</span><span>I</span><span>L</span>
+        </div>
+
+        <div class="hero-nav-ghost" aria-hidden="true">
+          <span>INÍCIO</span><i></i><span>SOBRE MIM</span><i></i><span>EXPERIÊNCIA</span>
+          <div class="hero-nav-spacer"></div>
+          <span>COMPETÊNCIAS</span><i></i><span>FORMAÇÃO</span><i></i><span>CONTATO</span>
+        </div>
+
+        <figure class="hero-portrait">
+          <div class="portrait-halo"></div>
+          <picture>
+            <source srcset="assets/images/gil-wanderson-portrait.avif" type="image/avif">
+            <img src="assets/images/gil-wanderson-portrait.webp" alt="Gil Wanderson Lopes de Oliveira" width="768" height="1152" decoding="async" fetchpriority="high">
+          </picture>
+        </figure>
+
+        <div class="hero-eyebrow hero-reveal">ADMINISTRAÇÃO × TECNOLOGIA</div>
+
+        <div class="hero-copy">
+          <p class="hero-side-copy hero-side-copy--left hero-reveal">Profissional proativo, com experiência em rotinas administrativas, gestão de documentos e suporte a equipes.</p>
+
+          <div class="hero-center-copy">
+            <h1 class="hero-heading" aria-label="Processos, dados e organização.">
+              <span>Processos,</span>
+              <span>dados &amp;</span>
+              <span>organização.</span>
+            </h1>
+            <div class="hero-actions hero-reveal">
+              <a class="button button--acid magnetic" href="#experiencia" data-swap-text>
+                <span class="swap-original">Ver experiência</span>
+                <span class="swap-clone" aria-hidden="true">Ver experiência</span>
+              </a>
+              <a class="button button--light magnetic" href="assets/docs/curriculo-gil-wanderson.png" download data-swap-text>
+                <span class="swap-original">Baixar currículo</span>
+                <span class="swap-clone" aria-hidden="true">Baixar currículo</span>
+              </a>
+            </div>
+          </div>
+
+          <p class="hero-side-copy hero-side-copy--right hero-reveal">Experiência no setor público de saúde, com foco em controles, indicadores, comunicação e eficiência.</p>
+        </div>
+
+        <article class="hero-card hero-card--role hero-reveal">
+          <span class="hero-card-icon">GW</span>
+          <div><strong>Auxiliar</strong><small>Administrativo</small></div>
+        </article>
+
+        <article class="hero-card hero-card--years hero-reveal">
+          <strong>03<sup>+</sup></strong>
+          <span>Anos de<br>experiência</span>
+        </article>
+
+        <article class="hero-card hero-card--traits hero-reveal">
+          <ul>
+            <li><i>●</i> Proativo</li>
+            <li><i>✦</i> Organizado</li>
+            <li><i>◆</i> Analítico</li>
+            <li><i>■</i> Colaborativo</li>
+          </ul>
+        </article>
+
+        <div class="scroll-cue hero-reveal" aria-hidden="true">
+          <span>ROLE PARA EXPLORAR</span><i></i>
+        </div>
       </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <div class="stat-num">2023</div>
-          <div class="stat-label">Atuação Profissional</div>
+    </section>
+
+    <section id="sobre" class="about" data-section="sobre">
+      <div class="section-kicker" data-reveal>01 / SOBRE MIM</div>
+      <div class="about-heading-wrap">
+        <h2 data-reveal>Da rotina ao resultado:<br><em>organização que move.</em></h2>
+        <p data-reveal>Minha experiência une execução administrativa, visão analítica e formação em tecnologia — uma combinação voltada a processos claros, dados confiáveis e apoio consistente às equipes.</p>
+      </div>
+
+      <div class="about-grid">
+        <article class="profile-statement" data-reveal>
+          <span class="statement-number">01</span>
+          <p>Atuei na Coordenadoria de Monitoramento Assistencial dos Contratos de Gestão da Secretaria da Saúde do Estado do Ceará, apoiando processos administrativos e a interlocução com o Instituto de Saúde e Gestão Hospitalar.</p>
+        </article>
+        <article class="profile-statement" data-reveal>
+          <span class="statement-number">02</span>
+          <p>Minha rotina envolveu monitoramento de indicadores de desempenho, análise de dados, organização documental e suporte a decisões relacionadas aos serviços de saúde.</p>
+        </article>
+        <aside class="about-quote" data-reveal>
+          <span>FOCO PROFISSIONAL</span>
+          <blockquote>Eficiência, transparência e melhoria contínua dos processos.</blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section id="experiencia" class="journey" data-section="experiencia">
+      <div class="journey-sticky">
+        <div class="journey-heading">
+          <div class="section-kicker">02 / TRAJETÓRIA</div>
+          <h2>Experiência<br><em>em movimento.</em></h2>
+          <p>Um percurso construído entre serviço público, gestão e tecnologia.</p>
+          <div class="journey-counter"><span id="journey-current">01</span><i></i><span>03</span></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">CC</div>
-          <div class="stat-label">Ciências da Computação</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">CE</div>
-          <div class="stat-label">Fortaleza - Ceará - Brasil</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">ADM</div>
-          <div class="stat-label">Auxiliar Administrativo</div>
+
+        <div class="journey-stage">
+          <svg class="journey-path" viewBox="0 0 1000 620" fill="none" aria-hidden="true">
+            <path class="journey-path-base" d="M20 540C230 310 302 495 470 338C640 180 725 268 982 62"/>
+            <path class="journey-path-progress" d="M20 540C230 310 302 495 470 338C640 180 725 268 982 62"/>
+            <circle cx="20" cy="540" r="8"/><circle cx="470" cy="338" r="8"/><circle cx="982" cy="62" r="8"/>
+          </svg>
+
+          <article class="journey-card is-active" data-step="1">
+            <div class="journey-card-top"><strong>'23</strong><span>INÍCIO PROFISSIONAL</span></div>
+            <h3>Secretaria da Saúde do Estado do Ceará</h3>
+            <p class="journey-role">Auxiliar Administrativo · 2023—2025</p>
+            <p>Planejamento e protocolização de processos, implementação de controles e apoio à eficiência da equipe.</p>
+            <div class="journey-tags"><span>Processos</span><span>Controle</span><span>Equipe</span></div>
+          </article>
+
+          <article class="journey-card" data-step="2">
+            <div class="journey-card-top"><strong>'24</strong><span>MONITORAMENTO</span></div>
+            <h3>Indicadores e contratos de gestão</h3>
+            <p class="journey-role">Coordenadoria de Monitoramento Assistencial</p>
+            <p>Análise de dados entre a organização social e os serviços prestados, apoiando decisões e o acompanhamento de desempenho.</p>
+            <div class="journey-tags"><span>Indicadores</span><span>Dados</span><span>Saúde</span></div>
+          </article>
+
+          <article class="journey-card" data-step="3">
+            <div class="journey-card-top"><strong>'25</strong><span>CONSOLIDAÇÃO</span></div>
+            <h3>Comunicação e governança</h3>
+            <p class="journey-role">Ponto central de comunicação</p>
+            <p>Articulação entre a Coordenadoria e a Secretaria da Saúde, com despachos formais, organização e foco na transparência dos processos.</p>
+            <div class="journey-tags"><span>Comunicação</span><span>Governança</span><span>Precisão</span></div>
+          </article>
         </div>
       </div>
+    </section>
+
+    <section id="competencias" class="skills-section" data-section="competencias" data-theme="dark">
+      <div class="skills-sticky">
+        <div class="skills-intro">
+          <div>
+            <div class="section-kicker section-kicker--dark">03 / COMPETÊNCIAS</div>
+            <h2>Ferramentas que<br><em>viram entrega.</em></h2>
+          </div>
+          <p>Conhecimentos informados no currículo, organizados por aplicação prática.</p>
+        </div>
+
+        <div class="skills-viewport">
+          <div class="skills-track">
+            <article class="skill-card skill-card--excel">
+              <div class="skill-card-meta"><span>01</span><div><i>CONTROLE</i><i>DADOS</i></div></div>
+              <div class="skill-visual"><strong>X</strong><span class="sheet-lines"></span></div>
+              <div class="skill-card-copy"><h3>Excel</h3><p>Planilhas, controles e apoio à análise de informações administrativas.</p></div>
+            </article>
+            <article class="skill-card skill-card--docs">
+              <div class="skill-card-meta"><span>02</span><div><i>ARQUIVOS</i><i>FLUXO</i></div></div>
+              <div class="skill-visual"><strong>DOC</strong><span class="paper-stack"></span></div>
+              <div class="skill-card-copy"><h3>Organização de documentos</h3><p>Classificação, protocolo e manutenção de rotinas documentais claras.</p></div>
+            </article>
+            <article class="skill-card skill-card--legal">
+              <div class="skill-card-meta"><span>03</span><div><i>FORMALIDADE</i><i>PRECISÃO</i></div></div>
+              <div class="skill-visual"><strong>§</strong><span class="orbit"></span></div>
+              <div class="skill-card-copy"><h3>Tipografia jurídica</h3><p>Produção de despachos e documentos com linguagem formal adequada.</p></div>
+            </article>
+            <article class="skill-card skill-card--slides">
+              <div class="skill-card-meta"><span>04</span><div><i>APRESENTAÇÃO</i><i>OFFICE</i></div></div>
+              <div class="skill-visual"><strong>P</strong><span class="slide-shape"></span></div>
+              <div class="skill-card-copy"><h3>PowerPoint 10</h3><p>Estruturação visual de apresentações e comunicação de informações.</p></div>
+            </article>
+            <article class="skill-card skill-card--design">
+              <div class="skill-card-meta"><span>05</span><div><i>VETOR</i><i>DESIGN</i></div></div>
+              <div class="skill-visual"><strong>C</strong><span class="design-knot"></span></div>
+              <div class="skill-card-copy"><h3>CorelDraw</h3><p>Criação e edição de elementos gráficos em ambiente vetorial.</p></div>
+            </article>
+            <article class="skill-card skill-card--photo">
+              <div class="skill-card-meta"><span>06</span><div><i>IMAGEM</i><i>EDIÇÃO</i></div></div>
+              <div class="skill-visual"><strong>Ps</strong><span class="pixel-grid"></span></div>
+              <div class="skill-card-copy"><h3>Photoshop CS5</h3><p>Tratamento e composição de imagens para materiais visuais.</p></div>
+            </article>
+            <article class="skill-card skill-card--layout">
+              <div class="skill-card-meta"><span>07</span><div><i>EDITORIAL</i><i>LAYOUT</i></div></div>
+              <div class="skill-visual"><strong>Id</strong><span class="columns"></span></div>
+              <div class="skill-card-copy"><h3>InDesign CS4</h3><p>Diagramação e organização de conteúdo em peças editoriais.</p></div>
+            </article>
+            <article class="skill-card skill-card--video">
+              <div class="skill-card-meta"><span>08</span><div><i>VÍDEO</i><i>NARRATIVA</i></div></div>
+              <div class="skill-visual"><strong>Pr</strong><span class="play-shape"></span></div>
+              <div class="skill-card-copy"><h3>Premiere CS4</h3><p>Edição básica de vídeo e organização de conteúdo audiovisual.</p></div>
+            </article>
+            <article class="skill-card skill-card--marketing">
+              <div class="skill-card-meta"><span>09</span><div><i>COMUNICAÇÃO</i><i>NEGÓCIOS</i></div></div>
+              <div class="skill-visual"><strong>M+</strong><span class="growth-bars"></span></div>
+              <div class="skill-card-copy"><h3>Marketing e vendas</h3><p>Noções de comunicação, relacionamento e visão orientada a resultados.</p></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="skills-footer"><span>ROLE PARA NAVEGAR</span><div class="skills-progress"><i></i></div><span>09 CARDS</span></div>
+        <div class="drag-cursor" aria-hidden="true"><span>←</span><b>SCROLL</b><span>→</span></div>
+      </div>
+    </section>
+
+    <section class="capabilities" data-section="competencias">
+      <div class="section-kicker" data-reveal>PERFIL PROFISSIONAL</div>
+      <p class="capabilities-text" aria-label="Organização, análise e comunicação combinadas para transformar rotinas complexas em processos mais claros, eficientes e confiáveis.">Organização, <span>análise</span> e comunicação combinadas para transformar rotinas complexas em processos mais claros, <span>eficientes</span> e confiáveis.</p>
+      <div class="capability-orbits" aria-hidden="true">
+        <span>PROCESSOS</span><span>DADOS</span><span>DOCUMENTOS</span><span>COMUNICAÇÃO</span>
+      </div>
+    </section>
+
+    <section id="formacao" class="education" data-section="formacao">
+      <div class="education-heading">
+        <div class="section-kicker" data-reveal>04 / FORMAÇÃO</div>
+        <h2 data-reveal>Conhecimento que<br><em>sustenta a prática.</em></h2>
+        <p data-reveal>Formação acadêmica e cursos informados no currículo.</p>
+      </div>
+
+      <div class="education-grid">
+        <article class="education-card education-card--featured" data-reveal>
+          <div class="education-card-top"><span>GRADUAÇÃO</span><strong>2024—</strong></div>
+          <div class="education-mark">CC</div>
+          <h3>Ciência da Computação</h3>
+          <p>Bacharelado · Estácio<br>Fortaleza, CE · Cursando</p>
+        </article>
+        <article class="education-card" data-reveal>
+          <div class="education-card-top"><span>CURSO</span><strong>2024</strong></div>
+          <div class="education-mark">01</div>
+          <h3>Gestão e fiscalização de contratos administrativos</h3>
+          <p>À luz da Lei nº 14.133/2021 · Escola de Gestão Pública do Estado do Ceará</p>
+        </article>
+        <article class="education-card" data-reveal>
+          <div class="education-card-top"><span>CURSO</span><strong>2024</strong></div>
+          <div class="education-mark">02</div>
+          <h3>Gestão de contratos</h3>
+          <p>À luz da Lei nº 12.781/97 e suas alterações — SESA · Escola de Gestão Pública do Estado do Ceará</p>
+        </article>
+        <article class="education-card education-card--small" data-reveal>
+          <div><span>FORMAÇÃO BÁSICA</span><strong>2021</strong></div>
+          <h3>Ensino Médio Completo</h3>
+          <p>EEM Engenheiro Ageu Romero</p>
+        </article>
+        <article class="education-card education-card--small education-card--language" data-reveal>
+          <div><span>IDIOMA</span><strong>PT-BR</strong></div>
+          <h3>Português</h3>
+          <p>Nativo</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contato" class="contact" data-section="contato" data-theme="dark">
+      <div class="contact-copy">
+        <div class="section-kicker section-kicker--dark">05 / CONTATO</div>
+        <h2>Vamos transformar<br>organização em<br><em>resultado?</em></h2>
+        <p>Estou aberto a conversas sobre oportunidades profissionais em administração, processos e tecnologia.</p>
+      </div>
+
+      <div class="chat-window" aria-label="Opções de contato">
+        <div class="chat-topbar"><span>GIL / CONTATO</span><i></i></div>
+        <div class="chat-line chat-line--typing">
+          <div class="typing-bubble"><i></i><i></i><i></i></div>
+        </div>
+        <div class="chat-line chat-line--message">
+          <div class="message-bubble">Olá! Que bom ter você por aqui. Como prefere conversar?</div>
+        </div>
+        <div class="chat-line chat-line--actions">
+          <a href="tel:+5585997432085">Ligar: (85) 99743-2085 <span>↗</span></a>
+          <a href="mailto:gilwanderson785@gmai.com">Enviar e-mail <span>↗</span></a>
+        </div>
+        <p class="contact-note">Sem formulário de fachada: escolha um canal real de contato.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-meta">
+      <span>GIL WANDERSON LOPES DE OLIVEIRA</span>
+      <span>AUXILIAR ADMINISTRATIVO</span>
+      <span>FORTALEZA · CE</span>
     </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="habilidades">
-    <div class="section-label">Habilidades</div>
-    <h2 class="section-title">Competências<br>Profissionais</h2>
-    <div class="skills-grid">
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Excel
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Organização de Documentos
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Tipografia Jurídica
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> PowerPoint
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> CorelDraw
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Photoshop CS5
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> InDesign CS4
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Premiere CS4
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Marketing e Vendas
-      </div>
-      <div class="skill-chip">
-        <div class="skill-icon">+</div> Português Nativo
-      </div>
+    <div class="footer-logo" aria-label="Gil">
+      <span>G</span><span>I</span><span>L</span>
+      <div class="trail-layer" aria-hidden="true"></div>
     </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projetos">
-    <div class="section-label">Currículo</div>
-    <h2 class="section-title">Experiência e<br>Formação</h2>
-    <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-num">01</div>
-        <div class="project-title">Secretaria da Saúde do Estado do Ceará</div>
-        <p class="project-desc">Auxiliar Administrativo entre 2023 e 2025, com atuação em planejamento, protocolização de processos, controles administrativos, análise de documentos e comunicação entre a Coordenadoria e a Secretaria.</p>
-        <div class="project-tags">
-          <span class="tag">Administração</span>
-          <span class="tag">Processos</span>
-          <span class="tag">Indicadores</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-num">02</div>
-        <div class="project-title">Ciências da Computação</div>
-        <p class="project-desc">Bacharelado na Estácio, em Fortaleza - CE. Curso iniciado em 2024 e atualmente em andamento, ampliando a base técnica em tecnologia, lógica e resolução de problemas.</p>
-        <div class="project-tags">
-          <span class="tag">Estácio</span>
-          <span class="tag">2024</span>
-          <span class="tag">Cursando</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-num">03</div>
-        <div class="project-title">Cursos em Gestão Pública</div>
-        <p class="project-desc">Formações pela Escola de Gestão Pública do Estado do Ceará em gestão e fiscalização de contratos administrativos, incluindo estudos sobre a Lei nº 14.133/2021 e contratos à luz da Lei nº 12.781/97.</p>
-        <div class="project-tags">
-          <span class="tag">Contratos</span>
-          <span class="tag">Gestão Pública</span>
-          <span class="tag">2024</span>
-        </div>
-      </div>
+    <div class="footer-bottom">
+      <span>© <span id="current-year">2026</span> GIL WANDERSON</span>
+      <a href="#inicio">VOLTAR AO TOPO ↑</a>
     </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contato">
-    <div class="contact-inner">
-      <div class="section-label">Contato</div>
-      <h2 class="section-title">Vamos<br>Conversar?</h2>
-      <div class="divider"></div>
-      <p class="contact-desc">
-        Estou disponºvel para oportunidades profissionais, projetos e contatos. Meu endereço foi atualizado para: <strong>Fortaleza - Ceará - Brasil</strong>.
-      </p>
-      <div class="contact-links">
-        <a href="mailto:gilwanderson785@gmail.com" class="contact-item">
-          Email: gilwanderson785@gmail.com
-        </a>
-        <a href="tel:+5585997432085" class="contact-item">
-          Telefone: (85) 99743-2085
-        </a>
-        <a href="https://github.com/gilwanderson785" target="_blank" class="contact-item">
-          GitHub
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <span>GW.</span>
-    <span>Gil Wanderson Lopes de Oliveira — <span>2026</span></span>
-    <span style="color: var(--muted); font-size: 0.65rem;">Fortaleza - Ceará - Brasil</span>
   </footer>
 
-  <script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    const cursorRing = document.getElementById('cursorRing');
-    let mouseX = 0, mouseY = 0;
-    let ringX = 0, ringY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursor.style.transform = `translate(${mouseX - 6}px, ${mouseY - 6}px)`;
-    });
-
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.12;
-      ringY += (mouseY - ringY) * 0.12;
-      cursorRing.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    // Nav active on scroll
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('nav ul a');
-
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => {
-        if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
-      });
-      navLinks.forEach(a => {
-        a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
-      });
-    });
-  </script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
